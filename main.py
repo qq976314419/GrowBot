@@ -3,25 +3,25 @@ import sys
 import yaml
 import logging
 from llm_client import LLMClient
-from growbot import GrowBot  # 导入更名后的类
+from growbot import GrowBot
 
 def setup_logging():
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.FileHandler('growbot.log', encoding='utf-8'),  # 添加 encoding
+            logging.FileHandler('growbot.log', encoding='utf-8'),
             logging.StreamHandler(sys.stdout)
         ]
     )
 
 def load_config(config_path="config.yaml"):
+    """加载配置文件，只读取非敏感信息"""
     if not os.path.exists(config_path):
         print(f"配置文件 {config_path} 不存在，将使用默认配置。")
         return {
             "llm": {
                 "provider": "openai",
-                "api_key": os.getenv("OPENAI_API_KEY", ""),
                 "model": "gpt-4"
             },
             "app": {
@@ -40,13 +40,13 @@ def main():
 
     config = load_config()
     llm_config = config.get("llm", {})
-    if not llm_config.get("api_key"):
-        logger.error("未提供API密钥")
-        print("错误：配置文件中未提供API密钥。")
-        sys.exit(1)
+    provider = llm_config.get("provider", "openai")
+    model = llm_config.get("model")
+    base_url = llm_config.get("base_url")
 
+    # API 密钥从环境变量获取，不依赖配置文件
     try:
-        llm = LLMClient(llm_config)
+        llm = LLMClient(provider=provider, model=model, base_url=base_url)
     except Exception as e:
         logger.error(f"初始化LLM客户端失败：{e}")
         print(f"初始化LLM客户端失败：{e}")

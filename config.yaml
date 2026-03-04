@@ -1,8 +1,9 @@
-{
-    "llm": {
-        "provider": "deepseek",
-        "api_key": "sk-ff51b3b868314ebaa50a0732bc940259",
-        "model": "deepseek-chat",
-        "base_url": "https://api.deepseek.com/v1"
-    }
-}
+llm:
+  provider: "deepseek"          # 可选：openai, deepseek
+  model: "deepseek-chat"              # 可选，默认根据 provider 自动选择
+  base_url: "https://api.deepseek.com/v1"                # 自定义 API 地址（可选，通常不需要）
+
+# 应用配置
+app:
+  max_fix_attempts: 3         # 代码修复最大尝试次数
+  module_dir: "modules"        # 模块存放目录

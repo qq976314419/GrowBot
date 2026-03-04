@@ -198,7 +198,7 @@ class ModuleManager:
         logger.info(f"模块 {name} 加载成功，描述：{description}")
         return module
 
-    def create_module(self, name, code, overwrite=False):
+    def create_module(self, name, code, overwrite=True):
         """将代码写入文件并加载，可选覆盖已存在文件"""
         filepath = os.path.join(self.module_dir, f"{name}.py")
         if os.path.exists(filepath) and not overwrite:
